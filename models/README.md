@@ -9,4 +9,4 @@ Download the data and model archive from Zenodo or release assets, then place th
 
 The included plotting scripts read processed HDF5 result files. The model weights are provided in the archive to record the trained model states used for the study.
 
-TODO: Zenodo DOI
+10.5281/zenodo.20174724
