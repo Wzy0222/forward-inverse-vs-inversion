@@ -1,0 +1,56 @@
+project:
+  name: transformer_inversion_gji
+  figure: Fig.7
+  scope: plot_existing_result
+
+paths:
+  primary_result: data/duo_real_result.h5
+  gmt_boundaries:
+    - data/gmt_data/CN-block-L1.gmt
+    - data/gmt_data/CN-block-L2.gmt
+    - data/gmt_data/CN-block-L1-deduced.gmt
+  output_dir: outputs/fig7
+  output_figure: outputs/fig7/fig7.png
+  output_figure_pdf: outputs/fig7/fig7.pdf
+  output_depth_figure_pattern: outputs/fig7/fig7_depth_{depth_km}km.png
+  output_depth_figure_pdf_pattern: outputs/fig7/fig7_depth_{depth_km}km.pdf
+
+hdf5_fields:
+  result:
+    prediction: vs_pred
+    longitude: longitude
+    latitude: latitude
+
+depth_sampling:
+  unit: km
+  start: 0.0
+  stop: 150.0
+  step: 0.5
+  count: 301
+
+figure:
+  map_region: [70, 150, 15, 55]
+  projection: M?
+  grid_spacing: 0.5d
+  search_radius: 2d
+  layer_depths_km: [20, 60, 100, 140]
+  layer_depth_indices: [42, 120, 200, 280]
+  subplot_figsize_cm: [12, 10]
+  final_axis_label_font_size: 26
+  final_axis_label_weight: bold
+  velocity_color_limits:
+    - [3.2, 3.9]
+    - [3.6, 4.7]
+    - [4.2, 4.8]
+    - [4.1, 4.7]
+  velocity_color_step: 0.01
+  velocity_cmap: paper_velocity
+  font_sizes:
+    panel_label: 14
+    depth_label: 14
+    tick_label: 11
+    axis_label: 16
+    colorbar_tick: 11
+  boundary_line_width: 0.7
+  boundary_alpha: 0.95
+  dpi: 600

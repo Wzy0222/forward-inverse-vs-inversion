@@ -1,0 +1,15 @@
+data/*.h5
+models/*.h5
+models/*.pt
+models/*.pth
+models/*.ckpt
+outputs/
+logs/
+old/
+*.ipynb
+*.patch
+.DS_Store
+__pycache__/
+.ipynb_checkpoints/
+.venv/
+.venv*/

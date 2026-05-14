@@ -1,0 +1,62 @@
+project:
+  name: transformer_inversion_gji
+  figure: Fig.5
+  scope: plot_existing_result
+
+paths:
+  primary_result: data/duo_synthetic_result.h5
+  gmt_boundaries:
+    - data/gmt_data/CN-block-L1.gmt
+    - data/gmt_data/CN-block-L2.gmt
+    - data/gmt_data/CN-block-L1-deduced.gmt
+  output_dir: outputs/fig5
+  output_figure: outputs/fig5/fig5.png
+  output_figure_pdf: outputs/fig5/fig5.pdf
+  output_depth_figure_pattern: outputs/fig5/fig5_depth_{depth_km}km.png
+  output_depth_figure_pdf_pattern: outputs/fig5/fig5_depth_{depth_km}km.pdf
+  output_table: outputs/fig5/fig5_metrics.csv
+
+hdf5_fields:
+  result:
+    vs: vs
+    prediction: vs_pred
+    longitude: longitude
+    latitude: latitude
+
+depth_sampling:
+  unit: km
+  start: 0.0
+  stop: 150.0
+  step: 0.5
+  count: 301
+
+figure:
+  map_region: [70, 150, 15, 55]
+  layer_depths_km: [20, 60, 100, 140]
+  layer_depth_indices: [42, 120, 200, 280]
+  projection: M?
+  grid_spacing: 1d
+  search_radius: 2d
+  subplot_figsize_cm: [20, 22]
+  final_axis_label_font_size: 28
+  final_axis_label_weight: bold
+  velocity_color_limits:
+    - [3.2, 3.9]
+    - [3.6, 4.7]
+    - [4.2, 4.8]
+    - [4.1, 4.7]
+  error_color_limit: [-0.2, 0.2]
+  velocity_color_step: 0.01
+  error_color_step: 0.001
+  velocity_cmap: paper_velocity
+  error_cmap: paper_difference
+  font_sizes:
+    panel_label: 14
+    depth_label: 14
+    tick_label: 11
+    axis_label: 16
+    colorbar_tick: 11
+    column_title: 12
+  boundary_line_width: 0.7
+  boundary_alpha: 0.95
+  dpi: 600

@@ -1,0 +1,9 @@
+cff-version: 1.2.0
+message: "If this package supports your work, cite the associated manuscript and archive record."
+title: "Reproduction package for selected shear-wave velocity inversion figures"
+version: "0.1.0"
+date-released: "2026-05-14"
+authors:
+  - name: "TODO: add manuscript authors"
+repository-code: "TODO: repository URL"
+doi: "TODO: Zenodo DOI"

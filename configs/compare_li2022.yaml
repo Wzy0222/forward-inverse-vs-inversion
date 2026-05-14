@@ -1,0 +1,76 @@
+project:
+  name: transformer_inversion_gji
+  analysis: li2022_reference_comparison
+  scope: plot_existing_results
+
+paths:
+  this_study_result: data/duo_real_result.h5
+  li2022_reference_model: data/Li_2022_16.h5
+  output_table: outputs/tables/li2022_comparison_metrics.csv
+  output_depthwise_figure: outputs/figures/li2022_depthwise_error.png
+  output_depthwise_figure_pdf: outputs/figures/li2022_depthwise_error.pdf
+  output_slice_comparison: outputs/figures/li2022_slice_comparison.png
+  output_slice_comparison_pdf: outputs/figures/li2022_slice_comparison.pdf
+  gmt_boundaries:
+    - data/gmt_data/CN-block-L1.gmt
+    - data/gmt_data/CN-block-L2.gmt
+    - data/gmt_data/CN-block-L1-deduced.gmt
+
+hdf5_fields:
+  this_study:
+    prediction: vs_pred
+    longitude: longitude
+    latitude: latitude
+  li2022:
+    vs: vs
+    longitude: longitude
+    latitude: latitude
+    depth: depth
+
+depth_sampling:
+  unit: km
+  start: 0.0
+  stop: 150.0
+  step: 0.5
+  count: 301
+
+comparison:
+  slice_depths_km: [20, 60, 100, 140]
+  metrics: [rmse, mae, bias, pearson_r]
+  coordinate_atol: 1.0e-10
+  depth_atol_km: 1.0e-10
+  difference_definition: this_study_minus_li2022
+
+figure:
+  map_region: [70, 150, 15, 55]
+  velocity_color_limits:
+    - [3.2, 3.9]
+    - [3.6, 4.7]
+    - [4.2, 4.8]
+    - [4.1, 4.5]
+  difference_color_limit: [-0.4, 0.4]
+  velocity_cmap: paper_velocity
+  difference_cmap: paper_difference
+  colorbar_ticks:
+    velocity:
+      - [3.2, 3.4, 3.6, 3.8]
+      - [3.6, 4.0, 4.4]
+      - [4.2, 4.4, 4.6, 4.8]
+      - [4.1, 4.2, 4.3, 4.4, 4.5]
+    difference: [-0.4, -0.2, 0.0, 0.2, 0.4]
+  slice_style:
+    column_title_font_size: 15
+    panel_label_font_size: 18
+    depth_label_font_size: 18
+    tick_label_font_size: 18
+    colorbar_tick_label_font_size: 16
+    global_axis_label_font_size: 28
+    subplot_hspace: 0.32
+    subplot_wspace: 0.13
+    subplot_left: 0.095
+    subplot_right: 0.985
+    subplot_top: 0.985
+    subplot_bottom: 0.065
+    global_y_label_x: 0.022
+    global_x_label_y: 0.018
+  dpi: 300
