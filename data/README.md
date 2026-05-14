@@ -9,4 +9,4 @@ Download the data and model archive from Zenodo or release assets, then place th
 - `data/Li_2022_16.h5` for the Li et al. comparison
 - `data/gmt_data/*.gmt` for map boundary overlays
 
-10.5281/zenodo.20174724
+https://doi.org/10.5281/zenodo.20174724

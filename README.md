@@ -4,7 +4,7 @@ This repository contains the code and configuration used to reproduce selected m
 
 The GitHub code repository does not directly include HDF5 data files or trained model weight files. Download the data and model archive from Zenodo or release assets.
 
-10.5281/zenodo.20174724
+https://doi.org/10.5281/zenodo.20174724
 
 After downloading the archive, place the files at these paths:
 
