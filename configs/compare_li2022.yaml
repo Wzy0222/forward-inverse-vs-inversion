@@ -1,7 +1,10 @@
+# Quantitative comparison against the Li et al. (2022) reference model.
+# This config only reads existing HDF5 files and writes new outputs under outputs/.
+
 project:
   name: transformer_inversion_gji
   analysis: li2022_reference_comparison
-  scope: plot_existing_results
+  scope: editor_response_quantitative_comparison
 
 paths:
   this_study_result: data/duo_real_result.h5
@@ -33,6 +36,7 @@ depth_sampling:
   stop: 150.0
   step: 0.5
   count: 301
+  default_axis: [0.0, 150.0, 0.5]
 
 comparison:
   slice_depths_km: [20, 60, 100, 140]
@@ -56,21 +60,45 @@ figure:
       - [3.2, 3.4, 3.6, 3.8]
       - [3.6, 4.0, 4.4]
       - [4.2, 4.4, 4.6, 4.8]
-      - [4.1, 4.2, 4.3, 4.4, 4.5]
+      - [4.1, 4.3, 4.5]
     difference: [-0.4, -0.2, 0.0, 0.2, 0.4]
   slice_style:
-    column_title_font_size: 15
+    column_title_font_size: 16
     panel_label_font_size: 18
     depth_label_font_size: 18
-    tick_label_font_size: 18
-    colorbar_tick_label_font_size: 16
-    global_axis_label_font_size: 28
-    subplot_hspace: 0.32
+    tick_label_font_size: 14
+    colorbar_tick_label_font_size: 14
+    global_axis_label_font_size: 20
+    subplot_hspace: 0.34
     subplot_wspace: 0.13
-    subplot_left: 0.095
+    subplot_left: 0.11
     subplot_right: 0.985
     subplot_top: 0.985
-    subplot_bottom: 0.065
-    global_y_label_x: 0.022
-    global_x_label_y: 0.018
+    subplot_bottom: 0.082
+    global_y_label_x: 0.020
+    global_x_label_x: 0.545
+    global_x_label_y: 0.050
+  depthwise_style:
+    title_font_size: 14
+    axis_label_font_size: 15
+    tick_label_font_size: 13
+    legend_font_size: 12
+    line_width: 1.8
+    grid_line_width: 0.7
+    subplot_left: 0.13
+    subplot_right: 0.97
+    subplot_top: 0.92
+    subplot_bottom: 0.11
   dpi: 300
+
+reproducibility_notes:
+  default_mode: compare_existing_hdf5_results
+  do_not_retrain: true
+  do_not_modify_notebooks: true
+  do_not_modify_random_seed: true
+  do_not_modify_model_structure: true
+  do_not_modify_training_weights: true
+  do_not_modify_data_split: true
+  do_not_modify_noise_scheme: true
+  do_not_modify_published_figures: true
+  do_not_move_original_directories: [data, models, figs, logs]

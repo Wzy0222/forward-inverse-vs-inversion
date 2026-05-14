@@ -357,7 +357,24 @@ def slice_style(config: dict[str, Any]) -> dict[str, float]:
         "top": float(configured.get("subplot_top", 0.985)),
         "bottom": float(configured.get("subplot_bottom", 0.065)),
         "global_y_x": float(configured.get("global_y_label_x", 0.018)),
+        "global_x_x": float(configured.get("global_x_label_x", 0.5)),
         "global_x_y": float(configured.get("global_x_label_y", 0.018)),
+    }
+
+
+def depthwise_style(config: dict[str, Any]) -> dict[str, float]:
+    configured = config["figure"].get("depthwise_style", {})
+    return {
+        "title": int(configured.get("title_font_size", 13)),
+        "axis_label": int(configured.get("axis_label_font_size", 14)),
+        "tick": int(configured.get("tick_label_font_size", 12)),
+        "legend": int(configured.get("legend_font_size", 12)),
+        "line_width": float(configured.get("line_width", 1.8)),
+        "grid_width": float(configured.get("grid_line_width", 0.7)),
+        "left": float(configured.get("subplot_left", 0.13)),
+        "right": float(configured.get("subplot_right", 0.97)),
+        "top": float(configured.get("subplot_top", 0.92)),
+        "bottom": float(configured.get("subplot_bottom", 0.11)),
     }
 
 
@@ -401,23 +418,44 @@ def save_figure(fig: plt.Figure, png_path: Path, pdf_path: Path, dpi: int) -> No
     fig.savefig(pdf_path, dpi=dpi, bbox_inches="tight")
 
 
-def plot_depthwise_error(png_path: Path, pdf_path: Path, axis: np.ndarray, rows: list[dict[str, Any]], dpi: int) -> None:
+def plot_depthwise_error(
+    png_path: Path,
+    pdf_path: Path,
+    config: dict[str, Any],
+    axis: np.ndarray,
+    rows: list[dict[str, Any]],
+) -> None:
+    del axis
+    figure_config = config["figure"]
+    sizes = depthwise_style(config)
     depth_rows = [row for row in rows if row["metric_scope"] == "depthwise"]
     depth = np.asarray([row["depth_km"] for row in depth_rows], dtype=float)
     rmse = np.asarray([row["rmse_km_s"] for row in depth_rows], dtype=float)
     mae = np.asarray([row["mae_km_s"] for row in depth_rows], dtype=float)
 
-    fig, ax = plt.subplots(figsize=(7.2, 8.5), constrained_layout=True)
-    ax.plot(rmse, depth, color="#1f77b4", linewidth=1.6, label="RMSE")
-    ax.plot(mae, depth, color="#ff7f0e", linewidth=1.6, label="MAE")
+    fig, ax = plt.subplots(figsize=(7.2, 8.5), constrained_layout=False)
+    ax.plot(rmse, depth, color="#1f77b4", linewidth=sizes["line_width"], label="RMSE")
+    ax.plot(mae, depth, color="#ff7f0e", linewidth=sizes["line_width"], label="MAE")
     ax.set_ylim(float(np.nanmax(depth)), float(np.nanmin(depth)))
-    ax.set_xlabel("Velocity difference metric (km/s)", fontsize=12)
-    ax.set_ylabel("Depth (km)", fontsize=12)
-    ax.set_title("Depth-wise difference relative to the Li et al. (2022) reference model", fontsize=14, pad=10)
-    ax.grid(True, color="0.85", linewidth=0.7)
-    ax.legend(frameon=False, fontsize=11)
-    ax.tick_params(axis="both", labelsize=11)
-    save_figure(fig, png_path, pdf_path, dpi)
+    ax.set_xlabel("Velocity difference metric (km/s)", fontsize=sizes["axis_label"])
+    ax.set_ylabel("Depth (km)", fontsize=sizes["axis_label"])
+    ax.set_title(
+        "Depth-wise difference relative to the Li et al. (2022) reference model",
+        fontsize=sizes["title"],
+        pad=8,
+    )
+    ax.grid(True, color="0.85", linewidth=sizes["grid_width"])
+    ax.legend(frameon=False, fontsize=sizes["legend"], loc="upper right", bbox_to_anchor=(0.98, 0.98))
+    ax.tick_params(axis="both", labelsize=sizes["tick"], direction="out", width=0.8, length=4)
+    for spine in ax.spines.values():
+        spine.set_linewidth(0.9)
+    fig.subplots_adjust(
+        left=sizes["left"],
+        right=sizes["right"],
+        top=sizes["top"],
+        bottom=sizes["bottom"],
+    )
+    save_figure(fig, png_path, pdf_path, int(figure_config.get("dpi", 300)))
     plt.close(fig)
 
 
@@ -514,7 +552,7 @@ def plot_slice_comparison(
             colorbar.outline.set_linewidth(0.8)
 
     fig.text(sizes["global_y_x"], 0.5, "Latitude (°)", va="center", rotation="vertical", fontsize=sizes["global_axis"])
-    fig.text(0.5, sizes["global_x_y"], "Longitude (°)", ha="center", fontsize=sizes["global_axis"])
+    fig.text(sizes["global_x_x"], sizes["global_x_y"], "Longitude (°)", ha="center", fontsize=sizes["global_axis"])
     fig.subplots_adjust(
         left=sizes["left"],
         right=sizes["right"],
@@ -559,7 +597,7 @@ def main() -> None:
     slice_pdf = resolve_path(config["paths"]["output_slice_comparison_pdf"])
 
     write_metrics(output_table, rows)
-    plot_depthwise_error(depthwise_png, depthwise_pdf, axis, rows, int(config["figure"].get("dpi", 300)))
+    plot_depthwise_error(depthwise_png, depthwise_pdf, config, axis, rows)
     triangulation = make_triangulation(data["longitude"], data["latitude"])
     style_report = plot_slice_comparison(slice_png, slice_pdf, config, axis, slice_indices, data, triangulation)
 
